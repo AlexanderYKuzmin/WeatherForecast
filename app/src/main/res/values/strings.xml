@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Прогноз погоды</string>
+
+    //messages
+    <string name="alert_dialog_permission_title">Требуется разрешение для геолокации</string>
+    <string name="failed_get_location">Ошибка получения данных геолокации</string>
+    <string name="location_is_not_available">Данные геолокации недоступны</string>
+
+    //maket texts
+    <string name="tv_forecast">Прогноз погоды на</string>
+    <string name="tv_cloudy">Облачно</string>
+    <string name="tv_feeling">Ощущается</string>
+    <string name="tv_wind">Ветер</string>
+    <string name="tv_humidity">Влажность</string>
+    <string name="tv_pressure">Давление</string>
+
+    <string name="input_api">Введите ключ:</string>
+    <string name="text_api_hint">Ключ-идентификатор</string>
+
+    <string name="search_hint">Название города</string>
+
+    <string name="ok">OK</string>
+
+    <string name="menu_properties">Настройки</string>
+    <string name="menu_search">Поиск</string>
+
+    <string name="celcius">%.0f\u00b0C</string>
+    <string name="min_max_temp_string">%.0f\u00b0C / %.0f\u00b0C</string>
+    <string name="wind_speed">%.1f м/с</string>
+    <string name="humidity_value">%d \uff05</string>
+    <string name="pressure_value">%d мм</string>
+
+    //tab names
+    <string-array name="tab_names">
+        <item>На день</item>
+        <item>На 5 дней</item>
+    </string-array>
+
+</resources>

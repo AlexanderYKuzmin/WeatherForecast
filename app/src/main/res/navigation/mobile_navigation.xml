@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/forecastStartFragment">
+
+    <fragment
+        android:id="@+id/forecastStartFragment"
+        android:name="com.kuzmin.weatherforecast.ui.fragments.ForecastStartFragment"
+        tools:layout="@layout/fragment_forecast_start">
+        <action
+            android:id="@+id/action_forecastStartFragment_to_forecastPagerFragment"
+            app:destination="@id/forecastPagerFragment" />
+        <action
+            android:id="@+id/action_forecastStartFragment_to_placeholder"
+            app:destination="@id/placeholder" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/forecastPagerFragment"
+        android:name="com.kuzmin.weatherforecast.ui.fragments.ForecastPagerFragment"
+        android:label="fragment_forecast_pager"
+        tools:layout="@layout/fragment_forecast_pager" >
+    </fragment>
+
+
+    <fragment android:id="@+id/placeholder" />
+
+</navigation>

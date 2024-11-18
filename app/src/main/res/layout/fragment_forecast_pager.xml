@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".ui.fragments.ForecastPagerFragment">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_forecast"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        app:tabIndicatorFullWidth="true"
+        app:tabTextColor="@color/color_gray"
+        app:tabSelectedTextColor="@color/color_gray_light"
+        app:tabBackground="@color/color_primary"
+        app:tabIndicatorAnimationMode="elastic"
+        app:tabIndicatorHeight="48dp"
+        app:tabTextAppearance="@style/ForecastTabLayoutTextAppearance"
+        />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_forecast"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        />
+
+</LinearLayout>

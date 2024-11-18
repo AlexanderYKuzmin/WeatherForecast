@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="WeatherAppToolbar" parent="Widget.MaterialComponents.Toolbar.PrimarySurface">
+        <item name="titleTextColor">?attr/colorOnPrimary</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
+    </style>
+
+    <style name="ForecastTabLayoutTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textScaleX">1.5</item>
+        <item name="android:layout_gravity">start</item>
+    </style>
+
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="android:textColor">@color/color_gray_light</item>
+    </style>
+
+    <style name="CardViewStyle" parent="CardView">
+        <item name="cardCornerRadius">8dp</item>
+        <item name="cardBackgroundColor">@color/card_color</item>
+        <item name="cardElevation">8dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="CardTextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/color_gray_light</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_margin">6dp</item>
+    </style>
+
+    <style name="InnerLinearStyle" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:background">@drawable/ll_in_card_bgd</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+</resources>
