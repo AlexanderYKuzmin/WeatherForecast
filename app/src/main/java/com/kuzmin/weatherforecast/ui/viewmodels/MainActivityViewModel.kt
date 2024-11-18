@@ -11,7 +11,6 @@ import com.kuzmin.weatherforecast.domain.usecases.LoadDataFromStorageUseCase
 import com.kuzmin.weatherforecast.domain.usecases.StoreLocationDataUseCase
 import com.kuzmin.weatherforecast.domain.usecases.network.GetForecastNetworkByLocationUseCase
 import com.kuzmin.weatherforecast.domain.usecases.network.GetLocationByCityNameUseCase
-import com.kuzmin.weatherforecast.util.AppConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers

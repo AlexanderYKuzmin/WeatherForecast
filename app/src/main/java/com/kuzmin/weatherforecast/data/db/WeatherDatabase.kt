@@ -1,8 +1,6 @@
 package com.kuzmin.weatherforecast.data.db
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.kuzmin.weatherforecast.data.db.model.CityDb
 import com.kuzmin.weatherforecast.data.db.model.CloudsDb

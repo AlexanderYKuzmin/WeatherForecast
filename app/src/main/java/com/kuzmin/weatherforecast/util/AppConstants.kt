@@ -7,8 +7,5 @@ object AppConstants {
     const val METRIC_SYSTEM = "metric"
     const val RU = "ru"
 
-    const val NONEXISTENT_LATITUDE = -91.0
-    const val NONEXISTENT_LONGITUDE = -181.0
-
     const val DAY_OF_MONTH = "dayOfMonth"
 }

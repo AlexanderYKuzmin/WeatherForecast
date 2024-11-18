@@ -1,6 +1,5 @@
 package com.kuzmin.weatherforecast.di
 
-import androidx.compose.ui.graphics.Color
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.kuzmin.weatherforecast.domain.model.graphics.ChartDataCollector
@@ -17,11 +16,12 @@ import javax.inject.Singleton
 class GraphicsModule {
 
     @Singleton
-    fun provideChartDataBuilder(
+    @Provides
+    fun provideChartDataCollector(
         valueFormatter: ProfileChartValueFormatter,
         xAxis: XAxis,
-        yLeftAxis: YAxis,
-        yRightAxis: YAxis
+        @Named("leftYAxis") yLeftAxis: YAxis,
+        @Named("rightYAxis") yRightAxis: YAxis
     ): ChartDataCollector {
         return ChartDataCollector(valueFormatter, xAxis, yLeftAxis, yRightAxis)
     }

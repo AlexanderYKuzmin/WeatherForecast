@@ -4,7 +4,6 @@ import android.util.Log
 import com.kuzmin.weatherforecast.data.network.ApiService.Companion.APIID
 import com.kuzmin.weatherforecast.data.network.ApiService.Companion.LANGUAGE
 import com.kuzmin.weatherforecast.data.network.ApiService.Companion.UNITS
-import com.kuzmin.weatherforecast.util.AppConstants
 import com.kuzmin.weatherforecast.util.AppConstants.DEFAULT_API_KEY
 import com.kuzmin.weatherforecast.util.AppConstants.METRIC_SYSTEM
 import com.kuzmin.weatherforecast.util.AppConstants.RU

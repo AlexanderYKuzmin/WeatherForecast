@@ -6,12 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.kuzmin.weatherforecast.R
 import com.kuzmin.weatherforecast.databinding.ItemForecastBinding
 import com.kuzmin.weatherforecast.domain.model.forecast.ItemForecast
 import com.kuzmin.weatherforecast.domain.model.servicable.DaySelectionLiveDataContainer
 import com.kuzmin.weatherforecast.extensions.formatToDateString
-import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

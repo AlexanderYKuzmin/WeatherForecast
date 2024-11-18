@@ -19,12 +19,10 @@ import com.kuzmin.weatherforecast.data.network.model.MainDto
 import com.kuzmin.weatherforecast.data.network.model.SysDto
 import com.kuzmin.weatherforecast.data.network.model.WeatherDto
 import com.kuzmin.weatherforecast.data.network.model.WindDto
-import java.util.Date
 import javax.inject.Inject
 
 class DtoToDbModelMapper @Inject constructor() {
     fun mapForecastDataDtoToForecastDb(forecastJsonContainer: ForecastJsonContainer): ForecastDb {
-        if (forecastJsonContainer.cnt == 0) return throw RuntimeException("Count of days is 0")
 
         return ForecastDb(
             cityDb = mapCityDtoToCityDb(forecastJsonContainer.city),
@@ -65,7 +63,6 @@ class DtoToDbModelMapper @Inject constructor() {
         forecastDataDtoList: List<ForecastDataDto>,
         cityId: Int
     ): List<ItemForecastDb> {
-        if (forecastDataDtoList.isNullOrEmpty()) return throw RuntimeException("Count of days is 0")
         return forecastDataDtoList.map { mapForecastDataDtoToItemForecastDb(it, cityId) }
     }
 

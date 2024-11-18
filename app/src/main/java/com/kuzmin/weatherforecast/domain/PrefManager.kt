@@ -1,6 +1,5 @@
 package com.kuzmin.weatherforecast.domain
 
-import com.kuzmin.weatherforecast.domain.model.forecast.City
 import com.kuzmin.weatherforecast.domain.model.forecast.Coord
 
 interface PrefManager {

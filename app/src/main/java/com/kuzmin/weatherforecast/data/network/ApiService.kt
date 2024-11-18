@@ -2,9 +2,7 @@ package com.kuzmin.weatherforecast.data.network
 
 import com.kuzmin.weatherforecast.data.network.model.ForecastJsonContainer
 import com.kuzmin.weatherforecast.data.network.model.SingleDateWeatherJsonContainer
-import com.kuzmin.weatherforecast.util.AppConstants
 import retrofit2.http.GET
-import retrofit2.http.Headers
 import retrofit2.http.Query
 
 interface ApiService {

@@ -1,9 +1,7 @@
 package com.kuzmin.weatherforecast.domain.usecases.graphics
 
-import android.util.Log
 import com.kuzmin.weatherforecast.domain.model.forecast.Forecast
 import com.kuzmin.weatherforecast.domain.model.graphics.ChartDataCollector
-import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
 

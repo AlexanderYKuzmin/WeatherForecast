@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun renderUi(state: AppState) {
         val title = binding.toolbar.getChildAt(0) as TextView
-        if (state.title.isNullOrEmpty()) {
+        if (state.title.isEmpty()) {
             title.text = getString(R.string.app_name)
         } else {
             title.text = state.title

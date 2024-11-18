@@ -3,21 +3,16 @@ package com.kuzmin.weatherforecast.data.workers
 import android.app.Notification
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import com.kuzmin.weatherforecast.data.db.WeatherDao
 import com.kuzmin.weatherforecast.data.db.WeatherDatabase
-import com.kuzmin.weatherforecast.data.db.model.WeatherDb
 import com.kuzmin.weatherforecast.data.mappers.DtoToDbModelMapper
-import com.kuzmin.weatherforecast.data.mappers.DtoToModelMapper
 import com.kuzmin.weatherforecast.data.network.ApiService
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 
 @HiltWorker
 class RefreshWeatherDataWorker @AssistedInject constructor(
