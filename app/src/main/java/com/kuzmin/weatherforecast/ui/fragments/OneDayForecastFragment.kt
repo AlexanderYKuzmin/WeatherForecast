@@ -22,7 +22,7 @@ import com.kuzmin.weatherforecast.domain.model.graphics.ChartDataCollector.Compa
 import com.kuzmin.weatherforecast.domain.model.graphics.ChartDataCollector.Companion.X_LABELS_COUNT
 import com.kuzmin.weatherforecast.extensions.formatToDateString
 import com.kuzmin.weatherforecast.extensions.toMmHg
-import com.kuzmin.weatherforecast.ui.viewmodels.OneDayFragmentViewModel
+import com.kuzmin.weatherforecast.ui.viewmodels.ForecastViewModel
 import com.kuzmin.weatherforecast.util.AppConstants.DAY_OF_MONTH
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -37,7 +37,7 @@ class OneDayForecastFragment : Fragment() {
     private var _binding: FragmentOneDayForecastBinding? = null
     private val binding get() = _binding!!
 
-    private val oneDayFragmentViewModel: OneDayFragmentViewModel by viewModels()
+    private val forecastViewModel: ForecastViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +61,7 @@ class OneDayForecastFragment : Fragment() {
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                oneDayFragmentViewModel.loadData().collect { forecast ->
+                forecastViewModel.loadData().collect { forecast ->
                     val dayItem = forecast.list
                         .filter { it.date.dayOfMonth == dayOfMonth }.first()
 
@@ -101,7 +101,7 @@ class OneDayForecastFragment : Fragment() {
         if (forecast.list.isEmpty()) throw RuntimeException("No data")
 
         val chartDataCollector =
-            oneDayFragmentViewModel.populateAndGetChartDataCollector(
+            forecastViewModel.populateAndGetChartDataCollector(
                 forecast,
                 dayOfMonth ?: LocalDateTime.now().dayOfMonth
             )

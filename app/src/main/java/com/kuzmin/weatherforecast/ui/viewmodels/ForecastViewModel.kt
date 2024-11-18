@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
-class OneDayFragmentViewModel @Inject constructor(
+class ForecastViewModel @Inject constructor(
     private val loadDataDbUseCase: LoadDataDbUseCase,
     private val collectChartDataUseCase: CollectChartDataUseCase
 ) : ViewModel() {

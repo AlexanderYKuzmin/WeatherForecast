@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.kuzmin.weatherforecast.databinding.FragmentFiveDayForecastBinding
 import com.kuzmin.weatherforecast.ui.adapters.ForecastWeekListAdapter
-import com.kuzmin.weatherforecast.ui.viewmodels.OneDayFragmentViewModel
+import com.kuzmin.weatherforecast.ui.viewmodels.ForecastViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -24,7 +24,7 @@ class FiveDaysForecastFragment : Fragment() {
     private var _binding: FragmentFiveDayForecastBinding? = null
     private val binding get() = _binding!!
 
-    private val oneDayFragmentViewModel: OneDayFragmentViewModel by viewModels()
+    private val forecastViewModel: ForecastViewModel by viewModels()
 
     @Inject
     lateinit var forecastWeekListAdapter: ForecastWeekListAdapter
@@ -47,7 +47,7 @@ class FiveDaysForecastFragment : Fragment() {
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                oneDayFragmentViewModel.loadData().collect { forecast ->
+                forecastViewModel.loadData().collect { forecast ->
                     val list = mutableListOf(forecast.list.first())
 
                     list.addAll(
