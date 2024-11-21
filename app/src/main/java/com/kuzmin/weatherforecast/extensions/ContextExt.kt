@@ -13,7 +13,9 @@ fun Context.hasPermission(permissionType: String): Boolean {
 
 fun Context.hasRequiredRuntimePermissions() : Boolean {
     return hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
-                hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION) &&
+                    hasPermission(Manifest.permission.INTERNET) &&
+                        hasPermission(Manifest.permission.ACCESS_NETWORK_STATE)
 }
 
 fun Context.showToast(message: String) {

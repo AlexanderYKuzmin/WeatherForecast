@@ -9,13 +9,15 @@ interface ApiService {
 
     @GET("weather")
     suspend fun getLocationByCityName(
-        @Query(CITY_NAME) cityName: String
+        @Query(CITY_NAME) cityName: String,
+        @Query(APIID) apiKey: String
     ): SingleDateWeatherJsonContainer
 
     @GET("forecast")
     suspend fun getWeatherWeekByCoordinates(
         @Query(LATITUDE) latitude: Double,
         @Query(LONGITUDE) longitude: Double,
+        @Query(APIID) apiKey: String
     ): ForecastJsonContainer
 
 

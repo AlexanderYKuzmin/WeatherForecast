@@ -21,7 +21,7 @@ class NetworkModule {
         return OkHttpClient
             .Builder()
             .addInterceptor(requestInterceptor)
-            .connectTimeout(120, TimeUnit.SECONDS)
+            .connectTimeout(60, TimeUnit.SECONDS)
             .build()
     }
 

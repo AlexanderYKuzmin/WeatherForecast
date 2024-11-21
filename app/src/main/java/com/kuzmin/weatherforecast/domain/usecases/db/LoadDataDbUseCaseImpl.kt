@@ -5,11 +5,15 @@ import com.kuzmin.weatherforecast.domain.model.forecast.Forecast
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class LoadDataDbUseCase @Inject constructor(
+class LoadDataDbUseCaseImpl @Inject constructor(
     private val repository: Repository
-) {
+) : LoadDataDbUseCase {
 
-    suspend operator fun invoke(): Flow<Forecast> {
+    override suspend fun loadForecastFromDb(): Flow<Forecast> {
         return repository.getCurrentForecast()
     }
+}
+
+interface LoadDataDbUseCase {
+    suspend fun loadForecastFromDb(): Flow<Forecast>
 }

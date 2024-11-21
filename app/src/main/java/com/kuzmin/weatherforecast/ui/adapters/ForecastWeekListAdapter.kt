@@ -1,6 +1,5 @@
 package com.kuzmin.weatherforecast.ui.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,14 +7,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.kuzmin.weatherforecast.databinding.ItemForecastBinding
 import com.kuzmin.weatherforecast.domain.model.forecast.ItemForecast
-import com.kuzmin.weatherforecast.domain.model.servicable.DaySelectionLiveDataContainer
 import com.kuzmin.weatherforecast.extensions.formatToDateString
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 
-class ForecastWeekListAdapter @Inject constructor(
-    @ApplicationContext private val appContext: Context,
-    private val daySelectionLiveDataContainer: DaySelectionLiveDataContainer
+class ForecastWeekListAdapter (
+    private val onItemClickListener: (Int) -> Unit
 ) : ListAdapter<ItemForecast, ForecastWeekListAdapter.ItemForecastViewHolder>(ForecastDiffCallback) {
 
     override fun onCreateViewHolder(
@@ -43,7 +38,7 @@ class ForecastWeekListAdapter @Inject constructor(
                 tvCloudy.text = weather.description
 
                 root.setOnClickListener {
-                    daySelectionLiveDataContainer.setDayOfMonth(date.dayOfMonth)
+                    onItemClickListener.invoke(date.dayOfMonth)
                 }
             }
         }

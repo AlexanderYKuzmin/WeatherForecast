@@ -2,10 +2,12 @@ package com.kuzmin.weatherforecast.ui.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -24,10 +26,11 @@ class FiveDaysForecastFragment : Fragment() {
     private var _binding: FragmentFiveDayForecastBinding? = null
     private val binding get() = _binding!!
 
-    private val forecastViewModel: ForecastViewModel by viewModels()
+    private val forecastViewModel: ForecastViewModel by activityViewModels()
 
-    @Inject
-    lateinit var forecastWeekListAdapter: ForecastWeekListAdapter
+    private val forecastWeekListAdapter = ForecastWeekListAdapter {
+        forecastViewModel.setDayOfMonth(it)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,9 +44,7 @@ class FiveDaysForecastFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rvForecastWeek.apply {
-            this.adapter = forecastWeekListAdapter
-        }
+        binding.rvForecastWeek.adapter = forecastWeekListAdapter
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
@@ -57,22 +58,11 @@ class FiveDaysForecastFragment : Fragment() {
                                         && it.date.hour == 12
                             }
                     )
-
                     forecastWeekListAdapter.submitList(list)
                 }
             }
         }
     }
-
-    /*private fun setAdapterItemClickAction(adapter: ForecastWeekListAdapter) {
-        adapter.onItemClickListener = { Int ->
-            val siteTinyData = SiteTinyData(siteUuid, name, cUuid)
-            viewModel.storeSiteData(siteTinyData)
-            launchSelectedSiteFragment(siteTinyData)
-            onItemClickListener?.onSiteSelected(siteTinyData.sName)
-        }
-    }*/
-
 
     companion object {
         @JvmStatic

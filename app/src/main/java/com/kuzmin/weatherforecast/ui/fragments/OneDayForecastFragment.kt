@@ -3,10 +3,12 @@ package com.kuzmin.weatherforecast.ui.fragments
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -32,18 +34,10 @@ import java.util.Locale
 
 @AndroidEntryPoint
 class OneDayForecastFragment : Fragment() {
-    private var dayOfMonth: Int? = null
-
     private var _binding: FragmentOneDayForecastBinding? = null
     private val binding get() = _binding!!
 
-    private val forecastViewModel: ForecastViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        dayOfMonth = arguments?.getInt(DAY_OF_MONTH)
-    }
+    private val forecastViewModel: ForecastViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,17 +52,20 @@ class OneDayForecastFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.pbLoading.visibility = View.VISIBLE
+        val dayOfMonth = forecastViewModel.dayOfMonthLiveData.value
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 forecastViewModel.loadData().collect { forecast ->
-                    val dayItem = forecast.list
-                        .filter { it.date.dayOfMonth == dayOfMonth }.first()
+                    if (forecast.list.isEmpty()) return@collect
+                    val dayItem = forecast.list.firstOrNull { it.date.dayOfMonth == dayOfMonth }
 
                     binding.pbLoading.visibility = View.GONE
-                    fillData(dayItem)
 
-                    setChart(forecast)
+                    dayItem?.let {
+                        fillData(it)
+                        setChart(forecast, dayOfMonth!!)
+                    }
                 }
             }
         }
@@ -81,7 +78,6 @@ class OneDayForecastFragment : Fragment() {
                 .getDisplayName(TextStyle.FULL, locale)
                 .replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
             tvDate.text = dayItem.date.formatToDateString()
-            //tvDayTemperature.text= String.format("%.0f\u00B0C", dayItem.mainData.temp)
             tvDayTemperature.text= String.format(getString(R.string.celcius), dayItem.mainData.temp)
             tvFeeling.text= String.format(getString(R.string.celcius), dayItem.mainData.feelsLike)
             tvMinMaxTemp.text =
@@ -97,7 +93,7 @@ class OneDayForecastFragment : Fragment() {
         }
     }
 
-    private fun setChart(forecast: Forecast) {
+    private fun setChart(forecast: Forecast, dayOfMonth: Int) {
         if (forecast.list.isEmpty()) throw RuntimeException("No data")
 
         val chartDataCollector =
@@ -158,10 +154,6 @@ class OneDayForecastFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(day: Int) = OneDayForecastFragment().apply {
-            arguments = Bundle().apply {
-                putInt(DAY_OF_MONTH, day)
-            }
-        }
+        fun newInstance() = OneDayForecastFragment()
     }
 }

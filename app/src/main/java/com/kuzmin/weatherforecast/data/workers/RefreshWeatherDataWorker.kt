@@ -11,6 +11,7 @@ import com.kuzmin.weatherforecast.data.db.WeatherDao
 import com.kuzmin.weatherforecast.data.db.WeatherDatabase
 import com.kuzmin.weatherforecast.data.mappers.DtoToDbModelMapper
 import com.kuzmin.weatherforecast.data.network.ApiService
+import com.kuzmin.weatherforecast.domain.PrefManager
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
@@ -21,7 +22,8 @@ class RefreshWeatherDataWorker @AssistedInject constructor(
     private val apiService: ApiService,
     private val weatherDao: WeatherDao,
     private val weatherDatabase: WeatherDatabase,
-    private val dtoToDbModelMapper: DtoToDbModelMapper
+    private val dtoToDbModelMapper: DtoToDbModelMapper,
+    private val prefManager: PrefManager
 ) : CoroutineWorker(appContext, params) {
 
     override suspend fun getForegroundInfo(): ForegroundInfo {
@@ -34,9 +36,11 @@ class RefreshWeatherDataWorker @AssistedInject constructor(
         val latitude = inputData.getDouble(LATITUDE, 0.0)
         val longitude = inputData.getDouble(LONGITUDE, 0.0)
 
-        val forecastJsonContainer = apiService.getWeatherWeekByCoordinates(latitude, longitude)
+        val apiKey = prefManager.readApiKey()
 
-        Log.d("WORKER", forecastJsonContainer.toString())
+        val forecastJsonContainer =
+            apiService.getWeatherWeekByCoordinates(latitude, longitude, apiKey)
+
         weatherDatabase.clearAllTables()
 
         weatherDao.insertForecastData(

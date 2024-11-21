@@ -1,5 +1,6 @@
 package com.kuzmin.weatherforecast.data.datastore
 
+import androidx.datastore.preferences.core.byteArrayPreferencesKey
 import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 

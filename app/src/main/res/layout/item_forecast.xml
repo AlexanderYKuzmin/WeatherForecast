@@ -31,21 +31,40 @@
             tools:text="12.11.2024"
             />
 
-        <TextView
-            android:id="@+id/tv_day_temperature"
+        <LinearLayout
+            android:id="@+id/ll_day_temperature"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textColor="@color/color_gray_light"
-            android:textStyle="bold"
-            android:textSize="60sp"
-            android:scaleX="0.65"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="12dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="-14^C"
-            />
+            >
+            <TextView
+                android:id="@+id/tv_day_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/color_gray_light"
+                android:textStyle="bold"
+                android:textSize="60sp"
+                android:scaleX="0.65"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                tools:text="-14^C"
+                />
+
+            <TextView
+                android:id="@+id/tv_min_max"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_gray_light"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_gravity="center_horizontal"
+                tools:text="-15 / -12 ^C"/>
+        </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/ll_min_max"
@@ -55,20 +74,10 @@
             android:gravity="center_horizontal"
             android:background="@drawable/ll_in_card_bgd"
             android:layout_margin="12dp"
-            app:layout_constraintStart_toEndOf="@id/tv_day_temperature"
+            app:layout_constraintStart_toEndOf="@id/ll_day_temperature"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_date"
             app:layout_constraintBottom_toBottomOf="parent">
-
-            <TextView
-                android:id="@+id/tv_min_max"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/color_gray_light"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_margin="12dp"
-                tools:text="-15 / -12 ^C"/>
 
             <TextView
                 android:id="@+id/tv_cloudy"

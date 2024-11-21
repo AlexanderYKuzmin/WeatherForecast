@@ -12,5 +12,10 @@
 
     </style>
 
-    <style name="Theme.WeatherForecast" parent="Base.Theme.WeatherForecast" />
+    <style name="Theme.WeatherForecast" parent="Base.Theme.WeatherForecast"/>
+
+    <style name="Theme.WeatherForecast.Toolbar" parent="Theme.WeatherForecast">
+        <item name="fontFamily">@font/samdan_cyrilic</item>
+    </style>
+
 </resources>

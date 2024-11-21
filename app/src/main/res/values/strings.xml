@@ -3,8 +3,15 @@
 
     //messages
     <string name="alert_dialog_permission_title">Требуется разрешение для геолокации</string>
+    <string name="alert_dialog_permission_message">Начиная с Андроид версии 6, система запрашивает разрешения для приложений</string>
     <string name="failed_get_location">Ошибка получения данных геолокации</string>
     <string name="location_is_not_available">Данные геолокации недоступны</string>
+
+    <string name="failed_internet_connection">Проверьте интернет соединение</string>
+    <string name="restricted_internet_connection">Доступ в сеть ограничен</string>
+
+    <string name="invalid_api_key">Некорректный Ключ-идентификатор</string>
+    <string name="api_key_updated">Ключ обновлен</string>
 
     //maket texts
     <string name="tv_forecast">Прогноз погоды на</string>
@@ -19,7 +26,8 @@
 
     <string name="search_hint">Название города</string>
 
-    <string name="ok">OK</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Отмена</string>
 
     <string name="menu_properties">Настройки</string>
     <string name="menu_search">Поиск</string>
@@ -36,4 +44,17 @@
         <item>На 5 дней</item>
     </string-array>
 
+    <string name="settings_hint">\u0020\u0020\u0020 Ключ-идентификатор</string>
+
+
+    <string name="response_error_bad_request">Некорректный запрос.</string>
+    <string name="response_error_unauthorised">Пользователь не авторизован.</string>
+    <string name="response_error_internal_server_error">Внутренняя ошибка сервера.</string>
+    <string name="response_error_service_unavailable">Сервис недоступен.</string>
+    <string name="response_error_host_unavailable">Нет доступа к странице \"api.openweathermap.org\"</string>
+    <string name="response_error_unknown">Неизвестная ошибка</string>
+
+    <string name="internet_connection_available">Интернет соединение восстановлено</string>
+
+    <string name="response_error_timeout">Превышено время ожидания сервера.</string>
 </resources>

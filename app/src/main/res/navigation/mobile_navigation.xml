@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
@@ -11,20 +12,23 @@
         tools:layout="@layout/fragment_forecast_start">
         <action
             android:id="@+id/action_forecastStartFragment_to_forecastPagerFragment"
-            app:destination="@id/forecastPagerFragment" />
+            app:destination="@id/forecastPagerFragment"
+            app:popUpTo="@id/forecastStartFragment" />
         <action
-            android:id="@+id/action_forecastStartFragment_to_placeholder"
-            app:destination="@id/placeholder" />
+            android:id="@+id/action_forecastStartFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:popUpTo="@id/forecastStartFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/forecastPagerFragment"
         android:name="com.kuzmin.weatherforecast.ui.fragments.ForecastPagerFragment"
         android:label="fragment_forecast_pager"
-        tools:layout="@layout/fragment_forecast_pager" >
-    </fragment>
+        tools:layout="@layout/fragment_forecast_pager" />
 
-
-    <fragment android:id="@+id/placeholder" />
-
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.kuzmin.weatherforecast.ui.fragments.SettingsFragment"
+        tools:layout="@layout/fragment_settings"
+        />
 </navigation>

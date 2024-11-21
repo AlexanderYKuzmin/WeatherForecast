@@ -5,11 +5,11 @@ import com.kuzmin.weatherforecast.domain.model.graphics.ChartDataCollector
 import java.time.LocalTime
 import javax.inject.Inject
 
-class CollectChartDataUseCase @Inject constructor(
+class CollectChartDataUseCaseImpl @Inject constructor(
     private val chartDataCollector: ChartDataCollector
-) {
+) : CollectChartDataUseCase {
 
-    operator fun invoke(forecast: Forecast, dayOfMonth: Int): ChartDataCollector {
+    override fun collectChartData(forecast: Forecast, dayOfMonth: Int): ChartDataCollector {
         return chartDataCollector.apply {
             val xyData = forecast.list
                 .filter { it.date.dayOfMonth == dayOfMonth }
@@ -24,3 +24,8 @@ class CollectChartDataUseCase @Inject constructor(
         }
     }
 }
+
+interface CollectChartDataUseCase {
+    fun collectChartData(forecast: Forecast, dayOfMonth: Int): ChartDataCollector
+}
+

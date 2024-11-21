@@ -16,7 +16,7 @@ class ForecastTabAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when(position) {
-            0 -> { OneDayForecastFragment.newInstance(forecastPagerFragment.dayOfMonth) }
+            0 -> { OneDayForecastFragment.newInstance() }
             1 -> { FiveDaysForecastFragment.newInstance() }
             else -> throw RuntimeException("Wrong position number")
         }

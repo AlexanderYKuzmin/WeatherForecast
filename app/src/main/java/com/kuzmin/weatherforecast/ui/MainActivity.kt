@@ -1,18 +1,17 @@
 package com.kuzmin.weatherforecast.ui
 
 import android.annotation.SuppressLint
-import android.graphics.Typeface
 import android.location.Location
+import android.net.ConnectivityManager
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -26,18 +25,21 @@ import com.kuzmin.weatherforecast.domain.model.forecast.Coord
 import com.kuzmin.weatherforecast.domain.model.servicable.ForecastOperationResult
 import com.kuzmin.weatherforecast.domain.model.servicable.ForecastOperationResult.Error
 import com.kuzmin.weatherforecast.domain.model.servicable.ForecastOperationResult.GetForecastDataFromServerSuccess
+import com.kuzmin.weatherforecast.domain.model.servicable.ForecastOperationResult.GetLocationSuccess
 import com.kuzmin.weatherforecast.domain.model.servicable.ForecastOperationResult.Loading
 import com.kuzmin.weatherforecast.domain.model.servicable.ForecastOperationResult.LocationSavedDatastoreSuccess
-import com.kuzmin.weatherforecast.domain.model.servicable.ForecastOperationResult.GetLocationSuccess
+import com.kuzmin.weatherforecast.extensions.checkNetworkConnection
 import com.kuzmin.weatherforecast.extensions.hasRequiredRuntimePermissions
 import com.kuzmin.weatherforecast.extensions.requestLocationPermission
+import com.kuzmin.weatherforecast.extensions.showExceptionMessage
 import com.kuzmin.weatherforecast.extensions.showToast
+import com.kuzmin.weatherforecast.ui.fragments.SettingsFragment
 import com.kuzmin.weatherforecast.ui.viewmodels.MainActivityViewModel
 import com.kuzmin.weatherforecast.ui.viewmodels.MainActivityViewModel.AppState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SettingsFragment.OnSettingsButtonClickListener {
 
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
@@ -50,15 +52,26 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
+    private lateinit var  connectivityManager: ConnectivityManager
+
+    //private val networkAvailability = MutableLiveData(false)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
+        setSupportActionBar(binding.toolbar)
+
+        connectivityManager = getSystemService(ConnectivityManager::class.java) as ConnectivityManager
+        //connectivityManager.requestNetwork(getNetworkRequest(), networkCallback)
+
+        checkNetworkConnection(connectivityManager)
+
         val startFragmentBundle = bundleOf()
         navController.setGraph(navController.graph, startFragmentBundle)
-
-        setupToolbar()
 
         setupSearchView()
 
@@ -72,7 +85,7 @@ class MainActivity : AppCompatActivity() {
             if (state.title != getString(R.string.app_name)) {
                 mainActivityViewModel.getLocationByCityName(state.title)
             }
-            renderUi(state)
+            updateTitle(state)
         }
 
         mainActivityViewModel.forecastOperationResult.observe(this) { result ->
@@ -96,13 +109,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             R.id.mm_properties -> {
-                TODO()
+                launchForecastSettingsFragment()
             }
         }
         return true
     }
 
-    private fun renderUi(state: AppState) {
+    private fun updateTitle(state: AppState) {
         val title = binding.toolbar.getChildAt(0) as TextView
         if (state.title.isEmpty()) {
             title.text = getString(R.string.app_name)
@@ -112,10 +125,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleForecastOperationResult(result: ForecastOperationResult) {
+        binding.pbLoading.visibility = View.GONE
+
         when (result) {
             is Error -> {
-                showToast(result.throwable.toString())
-                Log.d("REQUEST", "ERROR: ${result.throwable}")
+                showExceptionMessage(
+                    result.handleError(this.resources),
+                    result.throwable
+                )
             }
 
             is GetForecastDataFromServerSuccess -> {
@@ -125,7 +142,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             is GetLocationSuccess -> {
-                mainActivityViewModel.storeLocationDataAndLoadData(
+                mainActivityViewModel.storeLocationData(
                     result.location,
                     mainActivityViewModel.appState.value?.title ?: getString(R.string.app_name)
                     )
@@ -137,23 +154,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             is Loading -> {
-
+                binding.pbLoading.visibility = View.VISIBLE
             }
-        }
-    }
-
-    private fun setupToolbar() {
-        setSupportActionBar(binding.toolbar)
-
-        val title = binding.toolbar.getChildAt(0) as TextView
-        val titleTypeFace: Typeface =
-            Typeface.createFromAsset(assets, "fonts/dead_hammer.ttf")
-
-        with(title) {
-            typeface = titleTypeFace
-            textSize = 16f
-            setPadding(10, 0, 0, 0)
-            setTextColor(ContextCompat.getColor(this@MainActivity, R.color.color_gray_light))
         }
     }
 
@@ -168,17 +170,45 @@ class MainActivity : AppCompatActivity() {
                     visibility = View.GONE
                     return true
                 }
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    if(newText.isNullOrEmpty())
-                        setQuery("\u00A0", false)
-                    return true
-                }
+                override fun onQueryTextChange(newText: String?): Boolean { return false }
             })
+
+            setOnCloseListener {
+                visibility = View.GONE
+                true
+            }
         }
     }
 
     private fun launchForecastPagerFragment() {
         navController.navigate(R.id.forecastPagerFragment)
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun launchForecastSettingsFragment() {
+        if (navController.currentDestination?.id != R.id.forecastStartFragment) {
+            navController.popBackStack(R.id.forecastStartFragment, false)
+        }
+
+        navController.navigate(R.id.settingsFragment)
+    }
+
+    override fun onSettingsFinished() {
+        navController.navigate(R.id.forecastPagerFragment)
+    }
+
+    private fun checkLocationPermissionAndGetLocation() {
+        if (hasRequiredRuntimePermissions()) {
+            val locationData = getLastKnownLocation()
+            if (locationData != null) {
+                mainActivityViewModel.storeLocationData(
+                    locationData,
+                    mainActivityViewModel.appState.value?.title ?: getString(R.string.app_name)
+                )
+            } else mainActivityViewModel.loadDataFromStorage()
+        } else {
+            requestLocationPermission()
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -194,19 +224,5 @@ class MainActivity : AppCompatActivity() {
                 showToast(getString(failed_get_location))
             }
         return locationData
-    }
-
-    private fun checkLocationPermissionAndGetLocation() {
-        if (hasRequiredRuntimePermissions()) {
-            val locationData = getLastKnownLocation()
-            if (locationData != null) {
-                mainActivityViewModel.storeLocationDataAndLoadData(
-                    locationData,
-                    mainActivityViewModel.appState.value?.title ?: getString(R.string.app_name)
-                )
-            } else mainActivityViewModel.loadDataFromStorage()
-        } else {
-            requestLocationPermission()
-        }
     }
 }
