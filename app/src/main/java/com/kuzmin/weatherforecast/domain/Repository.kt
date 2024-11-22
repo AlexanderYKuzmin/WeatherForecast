@@ -10,4 +10,6 @@ interface Repository {
     suspend fun getLocationByCityName(cityName: String): Coord
 
     suspend fun getCurrentForecast(): Flow<Forecast>
+
+    suspend fun getCityName(): String
 }

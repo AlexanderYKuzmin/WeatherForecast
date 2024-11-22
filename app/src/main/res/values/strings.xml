@@ -2,10 +2,14 @@
     <string name="app_name">Прогноз погоды</string>
 
     //messages
+    <string name="data_refreshed">Обновлены данные прогноза погоды</string>
+
     <string name="alert_dialog_permission_title">Требуется разрешение для геолокации</string>
     <string name="alert_dialog_permission_message">Начиная с Андроид версии 6, система запрашивает разрешения для приложений</string>
-    <string name="failed_get_location">Ошибка получения данных геолокации</string>
+    <string name="failed_get_location">Не удалось получить данные геолокации</string>
     <string name="location_is_not_available">Данные геолокации недоступны</string>
+
+    <string name="storage_error_get_location">Сохраненные данные локации не найдены. Используйте название Города</string>
 
     <string name="failed_internet_connection">Проверьте интернет соединение</string>
     <string name="restricted_internet_connection">Доступ в сеть ограничен</string>
@@ -28,6 +32,8 @@
 
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Отмена</string>
+
+    <string name="btn_refresh">Обновить</string>
 
     <string name="menu_properties">Настройки</string>
     <string name="menu_search">Поиск</string>

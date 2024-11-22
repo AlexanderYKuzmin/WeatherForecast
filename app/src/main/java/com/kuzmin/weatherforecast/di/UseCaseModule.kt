@@ -6,6 +6,8 @@ import com.kuzmin.weatherforecast.domain.usecases.LoadDataFromStorageUseCase
 import com.kuzmin.weatherforecast.domain.usecases.LoadDataFromStorageUseCaseImpl
 import com.kuzmin.weatherforecast.domain.usecases.StoreLocationDataUseCase
 import com.kuzmin.weatherforecast.domain.usecases.StoreLocationDataUseCaseImpl
+import com.kuzmin.weatherforecast.domain.usecases.db.GetCityNameFromDbUseCase
+import com.kuzmin.weatherforecast.domain.usecases.db.GetCityNameFromDbUseCaseImpl
 import com.kuzmin.weatherforecast.domain.usecases.db.LoadDataDbUseCase
 import com.kuzmin.weatherforecast.domain.usecases.db.LoadDataDbUseCaseImpl
 import com.kuzmin.weatherforecast.domain.usecases.graphics.CollectChartDataUseCase
@@ -45,4 +47,7 @@ interface UseCaseModule {
 
     @Binds
     fun bindLoadDataDbUseCase(impl: LoadDataDbUseCaseImpl): LoadDataDbUseCase
+
+    @Binds
+    fun bindGetCityNameFromDbUseCase(impl: GetCityNameFromDbUseCaseImpl): GetCityNameFromDbUseCase
 }

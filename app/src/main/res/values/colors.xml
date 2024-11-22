@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <color name="color_primary">#1C0E42</color>
     <color name="color_primary_dark">#150A33</color>
@@ -7,8 +7,8 @@
     <color name="color_accent_dark">#D64141</color>
     <color name="color_gray">#9ca9ba</color>
     <color name="color_gray_light">#EEEEEE</color>
-    <color name="color_surface">#F6F6F6</color>
-    <color name="color_on_surface">#202020</color>
+    <color name="color_surface">#562AA5</color>
+    <color name="color_on_surface">#D1C5C5</color>
 
     <color name="tab_indicator_active">#3F1C7E</color>
     <color name="ok_color">#89FA8D</color>

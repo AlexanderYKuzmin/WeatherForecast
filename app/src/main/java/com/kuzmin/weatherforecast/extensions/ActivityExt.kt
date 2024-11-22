@@ -5,20 +5,12 @@ import android.app.Activity
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
-import android.net.NetworkRequest
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import com.kuzmin.weatherforecast.R
 import com.kuzmin.weatherforecast.R.string.alert_dialog_permission_message
 import com.kuzmin.weatherforecast.R.string.alert_dialog_permission_title
-fun Activity.getNetworkRequest() = NetworkRequest.Builder()
-    .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-    .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-    .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-    .build()
-
-
 
 fun Activity.requestLocationPermission() {
     runOnUiThread {

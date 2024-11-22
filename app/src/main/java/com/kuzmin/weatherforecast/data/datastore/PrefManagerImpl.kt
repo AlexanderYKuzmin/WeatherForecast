@@ -5,10 +5,12 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
+import com.kuzmin.weatherforecast.data.datastore.DataScheme.CITY_NAME
 import com.kuzmin.weatherforecast.data.datastore.DataScheme.LATITUDE
 import com.kuzmin.weatherforecast.data.datastore.DataScheme.LONGITUDE
 import com.kuzmin.weatherforecast.domain.CryptoManager
 import com.kuzmin.weatherforecast.domain.PrefManager
+import com.kuzmin.weatherforecast.domain.model.forecast.CityAndLocation
 import com.kuzmin.weatherforecast.domain.model.forecast.Coord
 import com.kuzmin.weatherforecast.util.AppConstants
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -24,12 +26,11 @@ class PrefManagerImpl @Inject constructor(
 ) : PrefManager {
     val dataStore = context.dataStore
 
-    override suspend fun storeLocationData(locationData: Coord, city: String) {
+    override suspend fun storeLocationData(locationData: Coord) {
         with(locationData) {
             dataStore.edit { prefs ->
                 prefs[LATITUDE] = lat
                 prefs[LONGITUDE] = lon
-                prefs[DataScheme.CITY_NAME] = city
             }
         }
     }
@@ -52,9 +53,16 @@ class PrefManagerImpl @Inject constructor(
         }
     }
 
-    override suspend fun loadCity(): String {
+    override suspend fun loadCityAndLocation(): CityAndLocation {
         return dataStore.data.map { prefs ->
-            prefs[DataScheme.CITY_NAME] ?: AppConstants.APP_NAME
+            val cityName = prefs[CITY_NAME] ?: AppConstants.APP_NAME
+            val latitude = prefs[LATITUDE] ?: 0.0
+            val longitude = prefs [LONGITUDE] ?: 0.0
+
+            CityAndLocation(
+                Coord(latitude, longitude),
+                cityName
+            )
         }.first()
     }
 

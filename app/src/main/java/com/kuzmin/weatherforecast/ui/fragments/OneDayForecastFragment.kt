@@ -1,15 +1,14 @@
 package com.kuzmin.weatherforecast.ui.fragments
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -25,7 +24,6 @@ import com.kuzmin.weatherforecast.domain.model.graphics.ChartDataCollector.Compa
 import com.kuzmin.weatherforecast.extensions.formatToDateString
 import com.kuzmin.weatherforecast.extensions.toMmHg
 import com.kuzmin.weatherforecast.ui.viewmodels.ForecastViewModel
-import com.kuzmin.weatherforecast.util.AppConstants.DAY_OF_MONTH
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -37,6 +35,8 @@ class OneDayForecastFragment : Fragment() {
     private var _binding: FragmentOneDayForecastBinding? = null
     private val binding get() = _binding!!
 
+    private var onDataChangedListener: OnDataChangedListener? = null
+
     private val forecastViewModel: ForecastViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -45,6 +45,13 @@ class OneDayForecastFragment : Fragment() {
     ): View {
         _binding = FragmentOneDayForecastBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnDataChangedListener) {
+            onDataChangedListener = context
+        }
     }
 
     @SuppressLint("UnsafeRepeatOnLifecycleDetector")
@@ -65,6 +72,7 @@ class OneDayForecastFragment : Fragment() {
                     dayItem?.let {
                         fillData(it)
                         setChart(forecast, dayOfMonth!!)
+                        onDataChangedListener?.onForecastDataChanged(forecast.city.name)
                     }
                 }
             }
@@ -99,7 +107,7 @@ class OneDayForecastFragment : Fragment() {
         val chartDataCollector =
             forecastViewModel.populateAndGetChartDataCollector(
                 forecast,
-                dayOfMonth ?: LocalDateTime.now().dayOfMonth
+                dayOfMonth
             )
 
         binding.lineChart.apply {
@@ -156,4 +164,11 @@ class OneDayForecastFragment : Fragment() {
         @JvmStatic
         fun newInstance() = OneDayForecastFragment()
     }
+
+    interface OnDataChangedListener {
+
+        fun onForecastDataChanged(cityName: String)
+    }
 }
+
+

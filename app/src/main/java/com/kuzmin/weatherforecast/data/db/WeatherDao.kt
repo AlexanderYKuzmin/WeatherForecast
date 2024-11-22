@@ -43,6 +43,7 @@ interface WeatherDao {
     @Insert
     suspend fun addClouds(cloudsDb: CloudsDb)
 
+    @Transaction
     suspend fun addList(listDb: List<ItemForecastDb>) {
         listDb.forEach {
             addDate(it.dateDb)
@@ -64,4 +65,7 @@ interface WeatherDao {
     @Query("SELECT *, * FROM city " +
             "JOIN coord ON city.id = coord.coord_city_id")
     fun getForecast(): Flow<ForecastDb?>
+
+    @Query("SELECT name FROM city")
+    fun getCityName(): String?
 }

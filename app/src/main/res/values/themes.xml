@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <style name="Base.Theme.WeatherForecast" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryVariant">@color/color_primary_dark</item>
@@ -10,12 +10,9 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
 
+        <item name="textInputStyle">@style/TextInputSettingsTheme</item>
     </style>
 
     <style name="Theme.WeatherForecast" parent="Base.Theme.WeatherForecast"/>
-
-    <style name="Theme.WeatherForecast.Toolbar" parent="Theme.WeatherForecast">
-        <item name="fontFamily">@font/samdan_cyrilic</item>
-    </style>
 
 </resources>

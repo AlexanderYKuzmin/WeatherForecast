@@ -2,7 +2,7 @@
 <resources>
     <style name="WeatherAppToolbarTextAppearance" parent="@style/TextAppearance.AppCompat.Title">
         <item name="titleTextColor">?attr/colorOnPrimary</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">16dp</item>
         <item name="android:textColor">@color/color_gray_light</item>
         <item name="fontFamily">@font/dead_hammer</item>
         <item name="android:fontFamily">@font/dead_hammer</item>
@@ -35,13 +35,17 @@
         <item name="android:orientation">vertical</item>
     </style>
 
+    <style name="TextInputSettingsTheme" parent="Theme.WeatherForecast">
+        <item name="colorPrimary">@color/color_gray_light</item>
+        <item name="colorSurface">@color/card_color</item>
+        <item name="colorOnSurface">@color/color_gray</item>
+    </style>
+
     <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="boxStrokeColor">@color/color_gray_light</item>
         <item name="hintTextColor">@color/color_gray_light</item>
         <item name="android:hint">@string/settings_hint</item>
-    </style>
-
-    <style name="PbProgressBarStyle" parent="@style/Widget.MaterialComponents.CircularProgressIndicator">
 
     </style>
+
 </resources>

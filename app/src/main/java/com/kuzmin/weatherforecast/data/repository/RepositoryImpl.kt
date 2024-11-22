@@ -69,4 +69,9 @@ class RepositoryImpl @Inject constructor(
             }
         }.stateIn(CoroutineScope(Dispatchers.IO))
     }
+
+   override suspend fun getCityName(): String {
+       val cityName = weatherDao.getCityName() ?: AppConstants.APP_NAME
+       return cityName
+   }
 }

@@ -8,11 +8,11 @@ class StoreLocationDataUseCaseImpl @Inject constructor(
     private val prefManager: PrefManager
 ) : StoreLocationDataUseCase {
 
-    override suspend fun storeLocationData(locationData: Coord, city: String) {
-        prefManager.storeLocationData(locationData, city)
+    override suspend fun storeLocationData(locationData: Coord) {
+        prefManager.storeLocationData(locationData)
     }
 }
 
 interface StoreLocationDataUseCase {
-    suspend fun storeLocationData(locationData: Coord, city: String)
+    suspend fun storeLocationData(locationData: Coord)
 }

@@ -2,11 +2,11 @@ package com.kuzmin.weatherforecast.data.workers
 
 import android.app.Notification
 import android.content.Context
-import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
+import com.kuzmin.weatherforecast.R
 import com.kuzmin.weatherforecast.data.db.WeatherDao
 import com.kuzmin.weatherforecast.data.db.WeatherDatabase
 import com.kuzmin.weatherforecast.data.mappers.DtoToDbModelMapper
@@ -53,7 +53,12 @@ class RefreshWeatherDataWorker @AssistedInject constructor(
     }
 
     private fun createNotification() : Notification {
-        TODO()
+        return Notification.Builder(applicationContext, "1")
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle(applicationContext.getString(R.string.app_name))
+            .setContentText(applicationContext.getString(R.string.data_refreshed))
+            .setAutoCancel(true)
+            .build()
     }
 
     companion object {

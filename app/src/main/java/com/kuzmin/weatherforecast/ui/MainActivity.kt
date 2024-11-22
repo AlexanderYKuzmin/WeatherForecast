@@ -8,7 +8,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -24,8 +23,9 @@ import com.kuzmin.weatherforecast.databinding.ActivityMainBinding
 import com.kuzmin.weatherforecast.domain.model.forecast.Coord
 import com.kuzmin.weatherforecast.domain.model.servicable.ForecastOperationResult
 import com.kuzmin.weatherforecast.domain.model.servicable.ForecastOperationResult.Error
-import com.kuzmin.weatherforecast.domain.model.servicable.ForecastOperationResult.GetForecastDataFromServerSuccess
-import com.kuzmin.weatherforecast.domain.model.servicable.ForecastOperationResult.GetLocationSuccess
+import com.kuzmin.weatherforecast.domain.model.servicable.ForecastOperationResult.GetForecastDataFromDatastoreSuccess
+import com.kuzmin.weatherforecast.domain.model.servicable.ForecastOperationResult.GetForecastDataFromNetworkSuccess
+import com.kuzmin.weatherforecast.domain.model.servicable.ForecastOperationResult.GetLocationByCityNameFromNetworkSuccess
 import com.kuzmin.weatherforecast.domain.model.servicable.ForecastOperationResult.Loading
 import com.kuzmin.weatherforecast.domain.model.servicable.ForecastOperationResult.LocationSavedDatastoreSuccess
 import com.kuzmin.weatherforecast.extensions.checkNetworkConnection
@@ -33,13 +33,20 @@ import com.kuzmin.weatherforecast.extensions.hasRequiredRuntimePermissions
 import com.kuzmin.weatherforecast.extensions.requestLocationPermission
 import com.kuzmin.weatherforecast.extensions.showExceptionMessage
 import com.kuzmin.weatherforecast.extensions.showToast
+import com.kuzmin.weatherforecast.ui.fragments.ForecastStartFragment
+import com.kuzmin.weatherforecast.ui.fragments.OneDayForecastFragment
 import com.kuzmin.weatherforecast.ui.fragments.SettingsFragment
 import com.kuzmin.weatherforecast.ui.viewmodels.MainActivityViewModel
 import com.kuzmin.weatherforecast.ui.viewmodels.MainActivityViewModel.AppState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), SettingsFragment.OnSettingsButtonClickListener {
+class MainActivity :
+    AppCompatActivity(),
+    SettingsFragment.OnSettingsButtonClickListener,
+    OneDayForecastFragment.OnDataChangedListener,
+    ForecastStartFragment.OnRefreshListener
+{
 
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
@@ -54,8 +61,6 @@ class MainActivity : AppCompatActivity(), SettingsFragment.OnSettingsButtonClick
 
     private lateinit var  connectivityManager: ConnectivityManager
 
-    //private val networkAvailability = MutableLiveData(false)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
@@ -66,25 +71,22 @@ class MainActivity : AppCompatActivity(), SettingsFragment.OnSettingsButtonClick
         setSupportActionBar(binding.toolbar)
 
         connectivityManager = getSystemService(ConnectivityManager::class.java) as ConnectivityManager
-        //connectivityManager.requestNetwork(getNetworkRequest(), networkCallback)
 
         checkNetworkConnection(connectivityManager)
 
         val startFragmentBundle = bundleOf()
         navController.setGraph(navController.graph, startFragmentBundle)
 
-        setupSearchView()
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        setupSearchView()
 
         checkLocationPermissionAndGetLocation()
 
-        launchForecastPagerFragment()
-
         mainActivityViewModel.appState.observe(this) { state ->
-            if (state.title != getString(R.string.app_name)) {
+            /*if (state.title != getString(R.string.app_name)) {
                 mainActivityViewModel.getLocationByCityName(state.title)
-            }
+            }*/
             updateTitle(state)
         }
 
@@ -116,12 +118,7 @@ class MainActivity : AppCompatActivity(), SettingsFragment.OnSettingsButtonClick
     }
 
     private fun updateTitle(state: AppState) {
-        val title = binding.toolbar.getChildAt(0) as TextView
-        if (state.title.isEmpty()) {
-            title.text = getString(R.string.app_name)
-        } else {
-            title.text = state.title
-        }
+        binding.toolbar.title = state.title
     }
 
     private fun handleForecastOperationResult(result: ForecastOperationResult) {
@@ -135,18 +132,19 @@ class MainActivity : AppCompatActivity(), SettingsFragment.OnSettingsButtonClick
                 )
             }
 
-            is GetForecastDataFromServerSuccess -> {
-                if (navController.currentDestination?.id == R.id.forecastStartFragment) {
-                    launchForecastPagerFragment()
-                }
+            is GetForecastDataFromDatastoreSuccess -> {
+                mainActivityViewModel.loadDataFromNetwork(result.location)
             }
 
-            is GetLocationSuccess -> {
+            is GetForecastDataFromNetworkSuccess -> {
+                mainActivityViewModel.updateAppState()
+                launchForecastPagerFragment()
+            }
+
+            is GetLocationByCityNameFromNetworkSuccess -> {
                 mainActivityViewModel.storeLocationData(
-                    result.location,
-                    mainActivityViewModel.appState.value?.title ?: getString(R.string.app_name)
-                    )
-                mainActivityViewModel.loadDataFromNetwork(result.location)
+                    result.location
+                )
             }
 
             is LocationSavedDatastoreSuccess -> {
@@ -189,7 +187,6 @@ class MainActivity : AppCompatActivity(), SettingsFragment.OnSettingsButtonClick
         if (navController.currentDestination?.id != R.id.forecastStartFragment) {
             navController.popBackStack(R.id.forecastStartFragment, false)
         }
-
         navController.navigate(R.id.settingsFragment)
     }
 
@@ -197,15 +194,17 @@ class MainActivity : AppCompatActivity(), SettingsFragment.OnSettingsButtonClick
         navController.navigate(R.id.forecastPagerFragment)
     }
 
+    override fun onForecastDataChanged(cityName: String) {
+        mainActivityViewModel.updateAppState(cityName)
+    }
+
+    override fun onRefreshForecastStart() {
+        mainActivityViewModel.loadDataFromStorage()
+    }
+
     private fun checkLocationPermissionAndGetLocation() {
         if (hasRequiredRuntimePermissions()) {
-            val locationData = getLastKnownLocation()
-            if (locationData != null) {
-                mainActivityViewModel.storeLocationData(
-                    locationData,
-                    mainActivityViewModel.appState.value?.title ?: getString(R.string.app_name)
-                )
-            } else mainActivityViewModel.loadDataFromStorage()
+            getLastKnownLocation()
         } else {
             requestLocationPermission()
         }
@@ -218,10 +217,13 @@ class MainActivity : AppCompatActivity(), SettingsFragment.OnSettingsButtonClick
             .addOnSuccessListener { location: Location? ->
                 location?.let {
                     locationData = Coord(it.latitude, it.longitude)
+
+                    mainActivityViewModel.storeLocationData(locationData!!)
                 } ?: showToast(getString(location_is_not_available))
             }
             .addOnFailureListener {
                 showToast(getString(failed_get_location))
+                mainActivityViewModel.loadDataFromStorage()
             }
         return locationData
     }
